@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -126,6 +126,9 @@ jobs:
         run: |
           set -e
           cp update.json /tmp/update.json
+          # The manifest step overwrote the tracked file, so restore it before
+          # switching branches or git refuses the checkout.
+          git checkout -- update.json
           git fetch origin main
           git checkout -B main origin/main
           cp /tmp/update.json update.json
