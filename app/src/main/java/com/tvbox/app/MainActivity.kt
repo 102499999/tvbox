@@ -348,14 +348,18 @@ class MainActivity : ComponentActivity() {
             Intent(Settings.ACTION_SETTINGS),
             Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS),
             Intent(Settings.ACTION_SECURITY_SETTINGS),
-        ) else listOf(
-            Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri),
-            Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES),
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageUri),
-            Intent(Settings.ACTION_SECURITY_SETTINGS),
-            Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS),
-            Intent(Settings.ACTION_SETTINGS),
-        )
+        ) else buildList {
+            // ACTION_MANAGE_UNKNOWN_APP_SOURCES only exists from Android 8.0; on older
+            // releases the permission is granted from the app details screen instead.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                add(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri))
+                add(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES))
+            }
+            add(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageUri))
+            add(Intent(Settings.ACTION_SECURITY_SETTINGS))
+            add(Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS))
+            add(Intent(Settings.ACTION_SETTINGS))
+        }
         // Try launching directly: package visibility can make resolveActivity unreliable.
         for (intent in candidates) {
             try {

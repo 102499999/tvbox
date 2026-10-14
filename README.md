@@ -1,8 +1,18 @@
-﻿# TVBox
+﻿# TVBox（Android 7.0+ 分支）
+
+> **本分支说明**：这是 [ZxxXinI/tvbox](https://github.com/ZxxXinI/tvbox) 的分支，唯一的目的是把最低系统要求从 **Android 9（API 28）降到 Android 7.0（API 24）**，让老款电视盒子也能使用。上游功能一律保留，仅做兼容性适配：
+>
+> - `minSdk` 28 → 24（依赖库的实际下限是 23，24 是改动最小的取值）
+> - 补齐 legacy PNG 启动图标（上游只有 `mipmap-anydpi-v26`，Android 7.x 匹配不到图标资源）
+> - 修复 OTA 下载更新在 Android 7.x 上的崩溃：`NotificationChannel` / `Notification.Builder(ctx, channel)` 是 API 26 的 API，低版本抛的是 `Error`，原有的 `catch (Exception)` 抓不住
+> - 安装未知来源的跳转按系统版本选择目标设置页
+> - OTA 更新地址指向本仓库
+>
+> 签名与上游不同，**若已安装过官方版请先卸载再安装本版本**。推送 tag 即由 GitHub Actions 自动编译并发布 Release。
 
 TVBox 是一个面向 Android TV / 电视盒子的影视播放应用，使用 Kotlin、Jetpack Compose 和 Media3 ExoPlayer 构建。应用重点适配遥控器操作，支持影视分类、搜索、详情、m3u8 播放、观看历史、电视直播和 OTA 更新。
 
-当前源码版本为 `1.3.13`（`versionCode=10313`）。本版本合并 [PR #5](https://github.com/ZxxXinI/tvbox/pull/5)，修复重新进入搜索页后遥控器无法退格删除旧关键词的问题；感谢 [@lliyuu520](https://github.com/lliyuu520) 提交修复。保留此前设备模式与 OTA 安装包保存能力；服务端部署方式见 [多平台直播服务部署说明](platform_live_server/DEPLOYMENT.md)。
+当前源码版本为 `1.3.14`（`versionCode=10314`），基于上游 `1.3.13`。上游该版本合并 [PR #5](https://github.com/ZxxXinI/tvbox/pull/5)，修复重新进入搜索页后遥控器无法退格删除旧关键词的问题；保留设备模式与 OTA 安装包保存能力；服务端部署方式见 [多平台直播服务部署说明](platform_live_server/DEPLOYMENT.md)。
 
 > 请确保使用的影视与直播接口具备合法授权。本项目仅提供客户端能力，不内置或托管影视内容。
 
